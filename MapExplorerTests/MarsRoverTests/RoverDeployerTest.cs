@@ -1,3 +1,4 @@
+using System.Linq;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 using Codecool.MarsExploration.MapGenerator.Calculators.Service;
@@ -8,6 +9,7 @@ namespace MapExplorerTests.MarsRoverTests;
 public class RoverDeployerTest
 {
     private IRoverDeployer _roverDeployer = new RoverDeployer(new CoordinateCalculator());
+    private ICoordinateCalculator _coordinateCalculator = new CoordinateCalculator();
     
     [Test]
     public void CanPlaceFalseTest()
@@ -48,5 +50,27 @@ public class RoverDeployerTest
         var result = _roverDeployer.CanPlaceRover(new Coordinate(0,0), map);
         
         Assert.True(result);
+    }
+
+    [Test]
+    public void PlaceTest()
+    {
+        var map = new Map(new string?[2,2], true);
+        var spaceShipCoords = new Coordinate(0, 0);
+        var rover = _roverDeployer.PlaceRover(spaceShipCoords, map, 1);
+
+        var eligibleCoords = _coordinateCalculator.GetAdjacentCoordinates(spaceShipCoords, map.Dimension);
+        
+        Assert.That(eligibleCoords.Any(c => c == rover.Position));
+    }
+    
+    [Test]
+    public void PlaceTestFalse()
+    {
+        var map = new Map(new string?[0,0], true);
+        var spaceShipCoords = new Coordinate(0, 0);
+        var rover = _roverDeployer.PlaceRover(spaceShipCoords, map, 1);
+
+        Assert.That(rover, Is.Null);
     }
 }
