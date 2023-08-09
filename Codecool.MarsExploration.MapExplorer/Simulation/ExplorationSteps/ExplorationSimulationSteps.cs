@@ -1,4 +1,5 @@
 using System.Xml.Schema;
+using Codecool.MarsExploration.MapExplorer.Exploration;
 using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalizer;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.Simulation.Model;
@@ -29,14 +30,18 @@ public class ExplorationSimulationSteps
         _simulationContext.Steps += 1;
     }
 
-    public bool Run()
+    public ExplorationOutcome Run()
     {
-        if (CheckForTimeOut()) return false;
+        if (CheckForTimeOut()) return ExplorationOutcome.Timeout;
         Movement();
         var resources = Scan();
         var analysisResult = Analysis(resources);
         IncrementStep();
-        return !analysisResult;
+        if (analysisResult)
+        {
+            return ExplorationOutcome.Colonizable;
+        }
+        
 
     }
 
