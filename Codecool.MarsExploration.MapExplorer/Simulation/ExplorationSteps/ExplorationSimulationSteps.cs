@@ -16,6 +16,7 @@ public class ExplorationSimulationSteps
     private readonly ICoordinateCalculator _coordinateCalculator;
     private readonly IOutcomeAnalizer _outcomeAnalizer;
     private readonly ILogger _logger;
+    public ExplorationOutcome? ExplorationOutcome { get; private set; }
     public ExplorationSimulationSteps(SimulationContext simulationContext, ExplorationRoutine routine, ICoordinateCalculator coordinateCalculator, IOutcomeAnalizer outcomeAnalizer, ILogger logger)
     {
         _simulationContext = simulationContext;
@@ -23,6 +24,7 @@ public class ExplorationSimulationSteps
         _coordinateCalculator = coordinateCalculator;
         _outcomeAnalizer = outcomeAnalizer;
         _logger = logger;
+        ExplorationOutcome = null;
     }
 
     private void IncrementStep()
@@ -30,18 +32,23 @@ public class ExplorationSimulationSteps
         _simulationContext.Steps += 1;
     }
 
-    public ExplorationOutcome Run()
+    public bool Run()
     {
-        if (CheckForTimeOut()) return ExplorationOutcome.Timeout;
+        if (CheckForTimeOut())
+        {
+            ExplorationOutcome = ExplorationOutcome ?? Exploration.ExplorationOutcome.Timeout;
+            return false;
+        }
         Movement();
         var resources = Scan();
         var analysisResult = Analysis(resources);
         IncrementStep();
         if (analysisResult)
         {
-            return ExplorationOutcome.Colonizable;
+            ExplorationOutcome = Exploration.ExplorationOutcome.Colonizable;
         }
-        
+
+        return true;
 
     }
 
