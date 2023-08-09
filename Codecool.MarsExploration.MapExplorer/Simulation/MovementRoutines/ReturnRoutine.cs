@@ -15,4 +15,14 @@ public class ReturnRoutine
     {
         rover.SetPosition(startingCoordinate);
     }
+
+    public void MoveBackToSpaceShip(MarsRover.Model.MarsRover rover, IEnumerable<Coordinate> pathTaken)
+    {
+        IEnumerable<Coordinate> pathBack = pathTaken.Reverse();
+
+        foreach (var coordinate in pathBack)
+        {
+            rover.SetPosition(coordinate);
+        }
+    }
 }
