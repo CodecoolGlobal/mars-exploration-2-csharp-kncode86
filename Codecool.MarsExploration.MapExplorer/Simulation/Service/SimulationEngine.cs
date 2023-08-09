@@ -13,11 +13,14 @@ public class SimulationEngine
     }
     public void RunSimulation(SimulationContext simulationContext)
     {
+        
+        
         while(_explorationSimulationSteps.Run())
         {
             
         }
         var outcome = _explorationSimulationSteps.ExplorationOutcome;
+        Console.WriteLine(outcome);
         
     }
 }

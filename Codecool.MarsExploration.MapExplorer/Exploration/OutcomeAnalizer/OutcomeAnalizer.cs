@@ -17,7 +17,7 @@ public class OutcomeAnalizer : IOutcomeAnalizer
 
     public bool Timeout(int stepsTaken)
     {
-        return _configuration.Steps >= stepsTaken;
+        return _configuration.Steps > stepsTaken;
     }
 
     public bool Success(Coordinate coordinate, Map map)

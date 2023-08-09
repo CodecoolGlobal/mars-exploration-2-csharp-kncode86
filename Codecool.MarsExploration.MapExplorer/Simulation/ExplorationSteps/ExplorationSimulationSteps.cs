@@ -84,7 +84,7 @@ public class ExplorationSimulationSteps
         bool result = _outcomeAnalizer.Timeout(_simulationContext.Steps);
         string outcome = result ? "Timeout" : "Continue exploration";
         Log(_simulationContext.Steps, outcome, _simulationContext.Rover.Position, _simulationContext.Rover.Id);
-        return result;
+        return !result;
     }
 
     private void Log(int steps, string events, Coordinate position, string roverName)

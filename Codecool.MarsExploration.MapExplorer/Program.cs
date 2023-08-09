@@ -14,8 +14,8 @@ class Program
 
     public static void Main(string[] args)
     {
-        string mapFile = $@"{WorkDir}\Resources\exploration-0.map";
-        Coordinate landingSpot = new Coordinate(6, 6);
+        string mapFile = $@"{WorkDir}/Resources/exploration-0.map";
+        Coordinate landingSpot = new Coordinate(0, 0);
         
         var resources = new []{"*"};
         var timeoutSteps = 200;

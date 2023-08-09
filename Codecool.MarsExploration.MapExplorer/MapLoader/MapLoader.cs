@@ -46,7 +46,14 @@ public class MapLoader : IMapLoader
         {
             for (int j = 0; j < list[i].Length; j++)
             {
-                mapRepresentation[i, j] = list[i][j];
+                if (list[i][j].Contains(' '))
+                {
+                    mapRepresentation[i, j] = string.Empty;
+                }
+                else
+                {
+                    mapRepresentation[i, j] = list[i][j];
+                }
             }
         }
 
