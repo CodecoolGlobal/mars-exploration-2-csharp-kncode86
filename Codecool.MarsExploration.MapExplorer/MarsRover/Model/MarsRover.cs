@@ -18,4 +18,9 @@ public class MarsRover
         Encounters = new List<Coordinate>();
         _count++;
     }
+
+    public void SetPosition(Coordinate position)
+    {
+        Position = position;
+    }
 }
