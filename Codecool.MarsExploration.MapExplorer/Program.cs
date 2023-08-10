@@ -1,4 +1,4 @@
-﻿using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalizer;
+﻿using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalyzer;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.Simulation.ExplorationSteps;
 using Codecool.MarsExploration.MapExplorer.Simulation.MovementRoutines;

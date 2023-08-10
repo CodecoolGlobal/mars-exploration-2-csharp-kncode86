@@ -1,6 +1,6 @@
 using System.Xml.Schema;
 using Codecool.MarsExploration.MapExplorer.Exploration;
-using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalizer;
+using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalyzer;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.Simulation.Model;
 using Codecool.MarsExploration.MapExplorer.Simulation.MovementRoutines;
