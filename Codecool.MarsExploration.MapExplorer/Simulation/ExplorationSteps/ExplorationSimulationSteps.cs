@@ -14,15 +14,17 @@ public class ExplorationSimulationSteps
     private readonly SimulationContext _simulationContext;
     private readonly ExplorationRoutine _routine;
     private readonly ICoordinateCalculator _coordinateCalculator;
-    private readonly IOutcomeAnalizer _outcomeAnalizer;
+    private readonly IOutcomeAnalyzer _outcomeAnalyzer;
     private readonly ILogger _logger;
     public ExplorationOutcome? ExplorationOutcome { get; private set; }
-    public ExplorationSimulationSteps(SimulationContext simulationContext, ExplorationRoutine routine, ICoordinateCalculator coordinateCalculator, IOutcomeAnalizer outcomeAnalizer, ILogger logger)
+
+    public ExplorationSimulationSteps(SimulationContext simulationContext, ExplorationRoutine routine,
+        ICoordinateCalculator coordinateCalculator, IOutcomeAnalyzer outcomeAnalyzer, ILogger logger)
     {
         _simulationContext = simulationContext;
         _routine = routine;
         _coordinateCalculator = coordinateCalculator;
-        _outcomeAnalizer = outcomeAnalizer;
+        _outcomeAnalyzer = outcomeAnalyzer;
         _logger = logger;
         ExplorationOutcome = null;
     }
@@ -39,9 +41,12 @@ public class ExplorationSimulationSteps
             ExplorationOutcome = ExplorationOutcome ?? Exploration.ExplorationOutcome.Timeout;
             return false;
         }
+
         Movement();
         var resources = Scan();
-        var analysisResult = Analysis(resources);
+        _simulationContext.Rover.Encounters.UnionWith(resources);
+
+        var analysisResult = Analysis(_simulationContext.Rover.Encounters);
         IncrementStep();
         if (analysisResult)
         {
@@ -49,40 +54,50 @@ public class ExplorationSimulationSteps
         }
 
         return true;
+    }
 
+    private IEnumerable<Coordinate> Scan()
+    {
+        HashSet<Coordinate> coords = _coordinateCalculator
+            .GetAdjacentCoordinates(_simulationContext.Rover.Position, _simulationContext.Map.Dimension).ToHashSet();
+
+        for (int i = 1; i < _simulationContext.Rover.Sight - 1; i++)
+        {
+            var tempHashSet = _coordinateCalculator.GetAdjacentCoordinates(coords, _simulationContext.Map.Dimension)
+                .ToHashSet();
+
+            coords.UnionWith(tempHashSet);
+        }
+
+        Log(_simulationContext.Steps, "Scanning", _simulationContext.Rover.Position, _simulationContext.Rover.Id);
+
+        return coords;
     }
 
     private void Movement()
     {
         _simulationContext.Rover.SetPosition(_routine.NextStep(_simulationContext));
-        Log(_simulationContext.Steps, "Position change", _simulationContext.Rover.Position, _simulationContext.Rover.Id);
-    }
-
-    private IEnumerable<Coordinate> Scan()
-    {
-        var scannedCoordinates = _coordinateCalculator.GetAdjacentCoordinates(_simulationContext.Rover.Position,
-            _simulationContext.Map.Dimension, _simulationContext.Rover.Sight);
-        var result = scannedCoordinates.Where(c =>
-            _simulationContext.Resources.Any(r => r == _simulationContext.Map.Representation[c.Y, c.X]));
-        Log(_simulationContext.Steps, "Scanning", _simulationContext.Rover.Position, _simulationContext.Rover.Id);
-        return result;
-
+        Log(_simulationContext.Steps, "Position change", _simulationContext.Rover.Position,
+            _simulationContext.Rover.Id);
     }
 
     private bool Analysis(IEnumerable<Coordinate> resources)
-    { 
-        bool result = resources.Any(r => _outcomeAnalizer.Success(r, _simulationContext.Map));
-        string outcome = result ? "Colonizable" : "Unsuccessful analysis";
-        
-        Log(_simulationContext.Steps, outcome, _simulationContext.Rover.Position, _simulationContext.Rover.Id);
-        return result;
+    {
+        bool result = _outcomeAnalyzer.Success(resources, _simulationContext.Map);
 
+        if (result)
+        {
+            Log(_simulationContext.Steps, "Colonizable", _simulationContext.Rover.Position,
+                _simulationContext.Rover.Id);
+        }
+
+        return result;
     }
 
     private bool CheckForTimeOut()
     {
-        bool result = _outcomeAnalizer.Timeout(_simulationContext.Steps);
-        string outcome = result ? "Timeout" : "Continue exploration";
+        bool result = _outcomeAnalyzer.Timeout(_simulationContext.Steps);
+        string outcome = result ? "Continue exploration" : "Timeout";
         Log(_simulationContext.Steps, outcome, _simulationContext.Rover.Position, _simulationContext.Rover.Id);
         return !result;
     }
@@ -92,5 +107,4 @@ public class ExplorationSimulationSteps
         string message = $"Step: {steps}; Event {events}; Unit: {roverName}; Position: {position}";
         _logger.Log(message);
     }
-    
 }
