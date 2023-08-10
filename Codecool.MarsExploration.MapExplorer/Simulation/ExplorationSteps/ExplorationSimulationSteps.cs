@@ -1,4 +1,3 @@
-using System.Xml.Schema;
 using Codecool.MarsExploration.MapExplorer.Exploration;
 using Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalyzer;
 using Codecool.MarsExploration.MapExplorer.Logger;
@@ -51,6 +50,7 @@ public class ExplorationSimulationSteps
         if (analysisResult)
         {
             ExplorationOutcome = Exploration.ExplorationOutcome.Colonizable;
+            return false;
         }
 
         return true;
