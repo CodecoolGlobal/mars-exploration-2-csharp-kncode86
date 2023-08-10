@@ -29,7 +29,7 @@ public class ExplorationRoutine : IMovementRoutine
             adjacentFreeCoordinates.Add(coordinate);
         }
 
-        if (context.Rover.Position.Y + 1 >= 0 &&
+        if (context.Rover.Position.Y + 1 >= 0 && context.Rover.Position.Y + 1 < context.Map.Dimension &&
             (mapRepresentation[context.Rover.Position.Y + 1, context.Rover.Position.X] == "" ||
              mapRepresentation[context.Rover.Position.Y + 1, context.Rover.Position.X] == null))
         {
@@ -45,7 +45,7 @@ public class ExplorationRoutine : IMovementRoutine
             adjacentFreeCoordinates.Add(coordinate);
         }
 
-        if (context.Rover.Position.X + 1 >= 0 &&
+        if (context.Rover.Position.X + 1 >= 0  && context.Rover.Position.X + 1 < context.Map.Dimension &&
             (mapRepresentation[context.Rover.Position.Y, context.Rover.Position.X + 1] == "" ||
              mapRepresentation[context.Rover.Position.Y, context.Rover.Position.X + 1] == null))
         {
