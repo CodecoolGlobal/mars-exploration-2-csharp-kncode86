@@ -17,8 +17,8 @@ class Program
         string mapFile = $@"{WorkDir}/Resources/exploration-0.map";
         Coordinate landingSpot = new Coordinate(0, 0);
         
-        var resources = new []{"*"};
-        var timeoutSteps = 200;
+        var resources = new []{"*", "%"};
+        var timeoutSteps = 700;
         var coordinateCalculator = new CoordinateCalculator();
 
         var configuration =
@@ -27,10 +27,10 @@ class Program
         var simulationContextBuilder = new SimulationContextBuilder(configuration, coordinateCalculator);
         var simulationContext = simulationContextBuilder.GetSimulationContext();
         var explorationRoutine = new ExplorationRoutine();
-        var outcomeAnalizer = new OutcomeAnalizer(configuration, coordinateCalculator);
+        var outcomeAnalyzer = new OutcomeAnalyzer(configuration);
         var logger = new FileLogger("log.txt");
         
-        ExplorationSimulationSteps explorationSimulationSteps = new ExplorationSimulationSteps(simulationContext, explorationRoutine, coordinateCalculator, outcomeAnalizer, logger);
+        ExplorationSimulationSteps explorationSimulationSteps = new ExplorationSimulationSteps(simulationContext, explorationRoutine, coordinateCalculator, outcomeAnalyzer, logger);
         
         var simulationEngine = new SimulationEngine(explorationSimulationSteps);
         

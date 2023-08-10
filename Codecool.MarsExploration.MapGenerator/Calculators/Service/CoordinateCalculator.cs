@@ -22,7 +22,7 @@ public class CoordinateCalculator : ICoordinateCalculator
             coordinate with { Y = coordinate.Y + reach },
             coordinate with { Y = coordinate.Y - reach },
             coordinate with { X = coordinate.X + reach },
-            coordinate with { X = coordinate.X - reach },
+            coordinate with { X = coordinate.X - reach }
 
         };
 

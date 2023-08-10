@@ -8,14 +8,14 @@ public class MarsRover
     public string Id { get; init; }
     public Coordinate Position { get; private set; }
     public int Sight { get; init; }
-    public List<Coordinate> Encounters { get; init; }
+    public HashSet<Coordinate> Encounters { get; init; }
 
     public MarsRover(Coordinate position, int sight)
     {
         Id = $"rover-{_count}";
         Position = position;
         Sight = sight;
-        Encounters = new List<Coordinate>();
+        Encounters = new HashSet<Coordinate>();
         _count++;
     }
 
