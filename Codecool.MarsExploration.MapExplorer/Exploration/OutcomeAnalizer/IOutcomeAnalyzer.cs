@@ -3,9 +3,9 @@ using Codecool.MarsExploration.MapGenerator.MapElements.Model;
 
 namespace Codecool.MarsExploration.MapExplorer.Exploration.OutcomeAnalizer;
 
-public interface IOutcomeAnalizer
+public interface IOutcomeAnalyzer
 {
     bool Timeout(int stepsTaken);
-    bool Success(Coordinate coordinate, Map map);
+    bool Success(IEnumerable<Coordinate> coordinates, Map map);
     //bool LackOfResources();
 }
